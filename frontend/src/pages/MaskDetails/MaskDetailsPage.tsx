@@ -1,14 +1,13 @@
 import React from 'react';
 import {Outlet} from "react-router-dom";
-import Header from "../../components/Header/Header";
 
-const MainLayout = () => {
+const MaskDetailsPage = () => {
     return (
         <div>
-            <Header/>
+            MaskDetailsPage
             <Outlet />
         </div>
     );
 };
 
-export default MainLayout;
+export default MaskDetailsPage;

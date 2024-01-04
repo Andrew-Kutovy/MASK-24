@@ -1,0 +1,47 @@
+.App {
+    margin: 20px;
+}
+
+.Header {
+    height: 50px;
+    background-color: slategrey;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 25px;
+}
+
+.Header a[class='active']{
+    color: red;
+}
+
+.LeftLinks {
+    display: flex;
+    margin-left: 60px;
+}
+
+.LeftLinks a {
+    text-decoration: none;
+    color: snow;
+    margin-right: 10px; /* Добавим отступ между ссылками */
+    position: relative;
+}
+
+.LeftLinks a::after {
+    content: '|';
+    margin-left: 10px; /* Добавим отступ между разделителями */
+    color: snow;
+}
+
+.LeftLinks a:last-child::after {
+    content: ''; /* Уберем разделитель после последней ссылки */
+}
+
+.RightLinks {
+    margin-right: 60px;
+}
+
+.RightLinks a {
+    text-decoration: none;
+    color: snow;
+}
