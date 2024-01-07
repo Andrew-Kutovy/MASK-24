@@ -1,9 +1,10 @@
 import React from 'react';
+import AdminLayout from "../../layouts/AdminLayout/AdminLayout";
 
 const AccountPage = () => {
     return (
         <div>
-            My Account
+            <AdminLayout />
         </div>
     );
 };

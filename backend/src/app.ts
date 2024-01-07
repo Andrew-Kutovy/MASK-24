@@ -34,6 +34,26 @@ app.post('/products', async (req: Request, res: Response) => {
     }
     })
 
+app.get('/products/:id', async (req: Request, res: Response): Promise<Response<IProduct | null>> => {
+    const productId = req.params.id;
+
+    try {
+        // Поиск продукта по айди
+        const product = await Product.findById(productId);
+
+        // Если продукт найден, возвращаем его
+        if (product) {
+            return res.json(product);
+        } else {
+            // Если продукт не найден, возвращаем 404
+            return res.status(404).json({ message: 'Product not found' });
+        }
+    } catch (error) {
+        // Если произошла ошибка при поиске, возвращаем 500 с сообщением об ошибке
+        return res.status(500).json({ message: 'Internal Server Error' });
+    }
+});
+
 app.listen(PORT, async () => {
     await mongoose.connect(configs.DB_URI);
     console.log(`server started on port: ${PORT}`)

@@ -54,6 +54,21 @@ app.post('/products', async (req, res) => {
         res.status(400).json(e.message);
     }
 });
+app.get('/products/:id', async (req, res) => {
+    const productId = req.params.id;
+    try {
+        const product = await Product_model_1.Product.findById(productId);
+        if (product) {
+            return res.json(product);
+        }
+        else {
+            return res.status(404).json({ message: 'Product not found' });
+        }
+    }
+    catch (error) {
+        return res.status(500).json({ message: 'Internal Server Error' });
+    }
+});
 app.listen(PORT, async () => {
     await mongoose.connect(config_1.configs.DB_URI);
     console.log(`server started on port: ${PORT}`);

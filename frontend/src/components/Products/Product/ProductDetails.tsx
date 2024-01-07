@@ -1,11 +1,19 @@
-import React from 'react';
+import React, {Dispatch, FC, PropsWithChildren, SetStateAction} from 'react';
 import {IProduct} from "../../../interfaces/product.interface";
 
-const ProductDetails: React.FC<{ prod: IProduct }> = ({ prod }) => {
+interface IProps extends PropsWithChildren {
+    product: IProduct,
+    setProdForUpdate: Dispatch<SetStateAction<IProduct>>
+}
+const ProductDetails: FC<IProps> = ({ product, setProdForUpdate }) => {
+
     return (
         <div>
-            <p>{prod.name}</p>
-            <p>{prod.price}</p>
+            <div>name: {product.name}</div>
+            <div>price: {product.price}</div>
+            <button onClick={()=>setProdForUpdate(product)}>update</button>
+            <button>delete</button>
+            <button>details</button>
         </div>
     );
 };
