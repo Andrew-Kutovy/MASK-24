@@ -22,29 +22,37 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-const express_1 = __importDefault(require("express"));
+exports.productController = void 0;
+const product_service_1 = require("../services/product.service");
 const mongoose = __importStar(require("mongoose"));
-const config_1 = require("./configs/config");
-const product_router_1 = require("./routers/product.router");
-const user_router_1 = require("./routers/user.router");
-const PORT = 3001;
-const app = (0, express_1.default)();
-app.use(express_1.default.json());
-app.use(express_1.default.urlencoded({ extended: true }));
-app.use('/products', product_router_1.productRouter);
-app.use('/users', user_router_1.userRouter);
-app.use((error, req, res, next) => {
-    const status = error.status || 500;
-    res.status(status).json({
-        message: error.message,
-        status: error.status,
-    });
-});
-app.listen(PORT, async () => {
-    await mongoose.connect(config_1.configs.DB_URI);
-    console.log(`server started on port: ${PORT}`);
-});
+const api_error_1 = require("../errors/api.error");
+const Product_model_1 = require("../models/Product.model");
+class ProductController {
+    async getAll(req, res, next) {
+        try {
+            const products = product_service_1.productService.getAll();
+            return res.json(products);
+        }
+        catch (e) {
+            next(e);
+        }
+    }
+    async getById(req, res, next) {
+        try {
+            const { id } = req.params;
+            if (!mongoose.isObjectIdOrHexString(id)) {
+                throw new api_error_1.ApiError('Not valid ID', 404);
+            }
+            const product = await Product_model_1.Product.findById(id);
+            if (!product) {
+                throw new api_error_1.ApiError('Product not found', 404);
+            }
+            res.json(product);
+        }
+        catch (e) {
+            next(e);
+        }
+    }
+}
+exports.productController = new ProductController();
