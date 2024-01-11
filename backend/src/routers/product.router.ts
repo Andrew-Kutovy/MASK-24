@@ -26,27 +26,33 @@ router.post('', async (req: Request, res: Response, next: NextFunction): Promise
 
         res.status(201).json(createdProduct);
     } catch (e) {
-        res.status(400).json(e.message);
+        next(e)
     }
 })
 
-router.get('/:id', async (req: Request, res: Response): Promise<Response<IProduct | null>> => {
+router.get('/:id', async (req: Request, res: Response, next: NextFunction): Promise<Response<IProduct | null>> => {
     try {
         const {id} = req.params;
+        if (!mongoose.isObjectIdOrHexString(id)) {
+            throw new ApiError("Not valid ID", 400);
+        }
         const product = await Product.findById(id);
 
         if (!product) {
             return res.status(404).json({ message: 'Product not found' });
         }
         return res.json(product);
-    } catch (error) {
-        return res.status(500).json({ message: 'Internal Server Error' });
+    } catch (e) {
+        next(e)
     }
 });
 
-router.delete('/:id', async (req: Request, res: Response): Promise<any> => {
+router.delete('/:id', async (req: Request, res: Response, next: NextFunction): Promise<any> => {
     try {
         const {id} = req.params;
+        if (!mongoose.isObjectIdOrHexString(id)) {
+            throw new ApiError("Not valid ID", 400);
+        }
         const product = await Product.findById(id);
 
         if (!product) {
@@ -54,8 +60,8 @@ router.delete('/:id', async (req: Request, res: Response): Promise<any> => {
         }
         await Product.deleteOne({_id: id})
         return res.status(204).json('product was deleted');
-    } catch (error) {
-        return res.status(500).json({ message: 'Internal Server Error' });
+    } catch (e) {
+        next(e)
     }
 });
 

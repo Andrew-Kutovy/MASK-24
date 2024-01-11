@@ -44,25 +44,31 @@ router.post('', async (req, res, next) => {
         res.status(201).json(createdProduct);
     }
     catch (e) {
-        res.status(400).json(e.message);
+        next(e);
     }
 });
-router.get('/:id', async (req, res) => {
+router.get('/:id', async (req, res, next) => {
     try {
         const { id } = req.params;
+        if (!mongoose.isObjectIdOrHexString(id)) {
+            throw new api_error_1.ApiError("Not valid ID", 400);
+        }
         const product = await Product_model_1.Product.findById(id);
         if (!product) {
             return res.status(404).json({ message: 'Product not found' });
         }
         return res.json(product);
     }
-    catch (error) {
-        return res.status(500).json({ message: 'Internal Server Error' });
+    catch (e) {
+        next(e);
     }
 });
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', async (req, res, next) => {
     try {
         const { id } = req.params;
+        if (!mongoose.isObjectIdOrHexString(id)) {
+            throw new api_error_1.ApiError("Not valid ID", 400);
+        }
         const product = await Product_model_1.Product.findById(id);
         if (!product) {
             return res.status(404).json({ message: 'Product not found' });
@@ -70,8 +76,8 @@ router.delete('/:id', async (req, res) => {
         await Product_model_1.Product.deleteOne({ _id: id });
         return res.status(204).json('product was deleted');
     }
-    catch (error) {
-        return res.status(500).json({ message: 'Internal Server Error' });
+    catch (e) {
+        next(e);
     }
 });
 router.put('/:id', async (req, res, next) => {
