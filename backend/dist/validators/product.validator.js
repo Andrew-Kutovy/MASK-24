@@ -10,14 +10,14 @@ class ProductValidator {
 }
 exports.ProductValidator = ProductValidator;
 _a = ProductValidator;
-ProductValidator.price = joi_1.default.number().min(1).max(999999);
+ProductValidator.price = joi_1.default.number().min(0).max(999999);
 ProductValidator.title = joi_1.default.string().min(2).max(55);
 ProductValidator.description = joi_1.default.string().min(5).max(999);
-ProductValidator.photo = joi_1.default.object();
+ProductValidator.photo = joi_1.default.string();
 ProductValidator.create = joi_1.default.object({
     price: _a.price.required(),
     title: _a.title.required(),
-    description: _a.description.required(),
+    description: _a.description,
     photo: _a.photo
 });
 ProductValidator.update = joi_1.default.object({
