@@ -1,6 +1,8 @@
 import {model, Schema} from 'mongoose';
+import {ECategory} from "../enums/category.enum";
+import {IProduct} from "../types/product.type";
 
-const productSchema = new Schema({
+const productSchema = new Schema<IProduct>({
     title: {
         type: String
     },
@@ -10,6 +12,11 @@ const productSchema = new Schema({
     price: {
         type: Number
     },
+    category: {
+        type: String,
+        enum: ECategory,
+        required: true,
+    },
     photo: {
         type: String
     }
@@ -18,4 +25,5 @@ const productSchema = new Schema({
     versionKey: false
 })
 
-export const Product = model('product', productSchema);
+export const Product = model<IProduct>('product', productSchema);
+export const ProductEntity = typeof Product;
